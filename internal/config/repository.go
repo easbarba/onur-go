@@ -57,7 +57,7 @@ func All() []domain.Config {
 			continue
 		}
 
-		configed, err := TranslateConfig(p, file.Name())
+		configed, err := ParseConfig(p, file.Name())
 		if err != nil {
 			fmt.Print(err)
 			continue // just ignore faulty/empty configs
@@ -84,4 +84,22 @@ func One(lang string) ([]byte, error) {
 	}
 
 	return nil, errors.New(fmt.Sprintf("No configuration with Lang '%s' tag found!", lang))
+}
+
+// Bundle configurations as a JSON array
+func AllToJson() ([]byte, error) {
+	// mapped := make(map[string]domain.Projects)
+
+	configs := All()
+
+	// for _, config := range configs {
+	// 	mapped[config.Lang] = config.Projects
+	// }
+
+	result, err := json.Marshal(configs)
+	if err != nil {
+		return nil, errors.New(err.Error())
+	}
+
+	return result, nil
 }

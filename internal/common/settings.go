@@ -1,16 +1,15 @@
-package config
+package common
 
 import (
 	"fmt"
 	"os"
 	"path"
 
-	"github.com/easbarba/qas/internal/common"
 	"gopkg.in/ini.v1"
 )
 
-func Read() (bool, bool, int) {
-	settings := path.Join(common.Configfolder(), "settings.ini")
+func ReadSettings() (bool, bool, int) {
+	settings := path.Join(Configfolder(), "settings.ini")
 
 	cfg, err := ini.Load(settings)
 	if err != nil {

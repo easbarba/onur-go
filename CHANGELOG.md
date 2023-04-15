@@ -4,6 +4,10 @@
 - local: add tests
 - cli: use kong
 - actions: master branch as default
+- refactor: improve config namespace
+- feat(settings): use user settings
+- feat: add local configuration finder
+- feat: grab: use new route
 
 ## [0.2.2] - 16/01/2023
 

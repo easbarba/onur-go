@@ -11,44 +11,34 @@
 # You should have received a copy of the GNU General Public License
 # along with Qas. If not, see <https://www.gnu.org/licenses/>.
 
+.PHONY: imports grab vet test lint install deps coverage
 .DEFAULT_GOAL := build
+
+RUNNER ?= podman
 
 OS :=linux
 ARCH := amd64
 
-BINARY_NAME := qas
+NAME := qas
 MAIN := ./main.go
-TO := ${HOME}/.local/bin
+DEST := ${HOME}/.local/bin
 
-all: build test
+IMAGE_NAME := ${USER}/${NAME}-dev:$(shell cat .version)
+IMAGE_NAME_DEV := ${USER}/${NAME}:$(shell cat .version)
+
+# ================================= CONTAINER
+
+image-build:
+	${RUNNER} build --file ./Containerfile --tag ${IMAGE_BUILD}
+
+image-test:
+	${RUNNER} run --rm -it -v ${PWD}:/app -w /app golang:latest bash -c 'go mod download && mkdir -pv ~/.config/qas && cp -r ./examples/*.json ~/.config/qas && go test -v ./...'
+
+
+# ================================= UTILS
 
 deps:
 	go mod download
-
-build: test
-	GOARCH=$(ARCH) GOOS=$(OS) go build -race -ldflags "-extldflags '-static'" -o ${BINARY_NAME} ${MAIN}
-
-install: build
-	mv -v ./${BINARY_NAME} ${TO}/${BINARY_NAME}
-
-lint:
-	golangci-lint run --enable-all internal cmd/pak
-
-test:
-	go test -v ./...
-
-clean:
-	go clean
-	rm ${BINARY_NAME}
-
-vet:
-	go vet ./...
-
-grab:
-	go run ./main.go --grab
-
-archive:
-	go run ./main.go --archive meh,forevis,tar
 
 imports:
 	goimports -l -w .
@@ -56,7 +46,26 @@ imports:
 coverage:
 	go test --cover ./... -coverprofile=coverage.out
 
-image:
-	podman build --file ./Dockerfile --tag $USER/${BINARY_NAME}:$(shell cat .env)
+build: test
+	GOARCH=$(ARCH) GOOS=$(OS) go build -race -ldflags "-extldflags '-static'" -o ${NAME} ${MAIN}
 
-.PHONY: imports grab vet test lint install deps coverage
+install: build
+	mv -v ./${NAME} ${DEST}/${NAME}
+
+lint:
+	golangci-lint run --enable-all internal cmd/pak
+
+clean:
+	go clean
+	rm ${NAME}
+
+vet:
+	go vet ./...
+
+# ================================= ACTIONS
+
+grab:
+	go run ./main.go grab
+
+archive:
+	go run ./main.go archive meh,forevis,tar

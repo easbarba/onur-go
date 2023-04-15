@@ -18,9 +18,7 @@ import (
 	"os"
 	"path"
 	"strings"
-	"time"
 
-	"github.com/briandowns/spinner"
 	"github.com/fatih/color"
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing"
@@ -29,33 +27,28 @@ import (
 	"github.com/easbarba/qas/internal/config"
 )
 
-var s = spinner.New(spinner.CharSets[26], 100*time.Millisecond)
-
 // TODO: After grabbing informations log
 
 // Grab all project by pulling or cloning
 // TODO return error
 func Grab(verbose *bool) {
-	var branch string
-	projects := config.All() //verbose
+	projects := config.All()
 
 	for _, project := range projects {
 		for _, pj := range project.Projects {
 			name := strings.ToLower(pj.Name)
-			folder := path.Join(common.Home(), project.Lang, name)
+			folder := path.Join(common.ProjectsFolder(), project.Lang, name)
 
 			if pj.Branch == "" {
-				branch = "master"
-			} else {
-				branch = pj.Branch
+				pj.Branch = "master"
 			}
 
-			printInfo(name, pj.URL, branch, verbose)
+			printInfo(name, pj.URL, pj.Branch, verbose)
 
 			if _, err := os.Stat(path.Join(folder, ".git")); err != nil {
-				clone(folder, pj.Name, pj.URL, branch)
+				clone(folder, pj.Name, pj.URL, pj.Branch)
 			} else {
-				pull(folder, pj.URL, branch)
+				pull(folder, pj.URL, pj.Branch)
 			}
 		}
 	}
@@ -75,7 +68,7 @@ func printInfo(name, url, branch string, verbose *bool) {
 func clone(folder, name, url, branch string) {
 	var quiet *os.File
 
-	singleBranch, quietRs, depth := config.Read()
+	singleBranch, quietRs, depth := common.ReadSettings()
 	if quietRs == true {
 		quiet = os.Stdout
 	} else {
@@ -104,7 +97,7 @@ func clone(folder, name, url, branch string) {
 func pull(folder, url, branch string) {
 	var quiet *os.File
 
-	singleBranch, quietRs, depth := config.Read()
+	singleBranch, quietRs, depth := common.ReadSettings()
 	if quietRs == true {
 		quiet = os.Stdout
 	} else {
