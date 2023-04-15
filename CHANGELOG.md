@@ -1,3 +1,9 @@
+## 0.3
+
+- local: add base functionalities
+- local: add tests
+- cli: use kong
+
 ## [0.2.2] - 16/01/2023
 
 - revert auto start of `qas_api`

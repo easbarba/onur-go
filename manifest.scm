@@ -1,4 +1,3 @@
-;;;
 ;;  Qas is free software: you can redistribute it and/or modify
 ;;  it under the terms of the GNU General Public License as published by
 ;;  the Free Software Foundation, either version 3 of the License, or
@@ -11,9 +10,9 @@
 
 ;;  You should have received a copy of the GNU General Public License
 ;;  along with Qas. If not, see <https://www.gnu.org/licenses/>.
-;;;
+
 (specifications->manifest
- '("go@1.19"
+ '("go@1.20"
    "libgit2"
    "make"
    "nano"

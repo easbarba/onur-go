@@ -1,3 +1,16 @@
+// Qas is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Qas is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Qas. If not, see <https://www.gnu.org/licenses/>.
+
 package actions
 
 import (
@@ -12,6 +25,7 @@ import (
 	"github.com/go-git/go-git/v5"
 	"github.com/go-git/go-git/v5/plumbing"
 
+	"github.com/easbarba/qas/internal/common"
 	"github.com/easbarba/qas/internal/config"
 )
 
@@ -20,13 +34,14 @@ var s = spinner.New(spinner.CharSets[26], 100*time.Millisecond)
 // TODO: After grabbing informations log
 
 // Grab all project by pulling or cloning
+// TODO return error
 func Grab(verbose *bool) {
-	projects := config.All(verbose)
+	projects := config.All() //verbose
 
 	for _, project := range projects {
 		for _, pj := range project.Projects {
 			name := strings.ToLower(pj.Name)
-			folder := path.Join(config.HomeFolder, project.Lang, name)
+			folder := path.Join(common.Home(), project.Lang, name)
 
 			printInfo(name, pj.URL, pj.Branch, verbose)
 
@@ -37,7 +52,6 @@ func Grab(verbose *bool) {
 			}
 		}
 	}
-	// TODO return error
 }
 
 func printInfo(name, url, branch string, verbose *bool) {

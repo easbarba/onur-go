@@ -1,8 +1,7 @@
 [
     {
-        "name": "juancrg90/clean-code-notes",
-        "branch": "master",
-        "url": "https://github.com/JuanCrg90/Clean-Code-Notes"
+        "name": "guzzle",
+        "url": "https://github.com/guzzle/guzzle"
     },
     {
         "name": "github-gitignore",

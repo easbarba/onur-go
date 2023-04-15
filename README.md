@@ -1,28 +1,46 @@
 # Qas
 
-Easily manage multiple FLOSS repositories.
+[![Actions Status](https://github.com/easbarba/qas-go/workflows/ci/badge.svg)](https://github.com/easbarba/qas-go/actions)
 
-## API
+Easily manage multiple FLOSS repositories
 
-`qas_api` provides all projects to `qas`, so it needs to be running.
+# Installation
 
-https://github.com/easbarba/qas_api
+`go install https://github.com/easbarba/qas-go@latest`.
+
+[api](https://github.com/easbarba/qas_api_go) |
+[php](https://github.com/easbarba/qas)
+[php-api](https://github.com/easbarba/qas_api) | [ruby](https://github.com/easbarba/qas.rb) |
 
 ## Usage
 
-Grab all projects locally:
+`qas` consumes configuration in the following manners:
 
-    $ qas --grab
+By default it looks for configuration files at `$XDG_CONFIG/qas` or in the
+directory set in the `$QAS_CONFIG_HOME` environment variable.
 
-Archive selected projects at `$HOME/Downloads/archived`:
+```shell
+qas grab
+qas archive nuxt,awesomewm,gitignore
+```
 
-    $ qas --archive --name awesomewm,nuxt
+<!-- Of course, a `JSON` configuration file can provide projects; -->
 
-## Configuration
+<!-- ```shell -->
+<!-- qas grab --json ~/Downloads/misc.json -->
+<!-- ``` -->
 
-`qas` looks for configuration files at `$XDG_CONFIG/qas`:
+<!-- or it consumes even a REST API `JSON` resource providing all the projects. -->
 
-$XDG_CONFIG/qas/misc.json
+<!-- ```shell -->
+<!-- qas grab --api localhost:5000/configs -->
+<!-- ``` -->
+
+<!-- PS: an API example is at: https://github.com/easbarba/qas_api. -->
+
+## Configuration file
+
+A `qas` single configuration file:
 
 ```json
 [
@@ -35,42 +53,25 @@ $XDG_CONFIG/qas/misc.json
     "name": "nuxt",
     "branch": "main",
     "url": "https://github.com/nuxt/framework"
-  },
-  {
-    "name": "swift_format",
-    "branch": "main",
-    "url": "https://github.com/apple/swift-format"
   }
 ]
 ```
 
-## Installation
+More examples of configuration files are at `docs/examples`.
 
-Get the needed dependencies and install with:
+## Options
 
-    $ make deps & make install
+Consult `qas --help` for more options.
 
 ## GNU Guix
 
-To load all system dependencies, just run `guix shell`
+In a system with GNU Guix binary installed, its even easier to grab all
+dependencies: `guix shell`.
 
 ## TODO
 
-### High
+Check the `TODO.md` for more information.
 
-- add/overwrite configuration via cli: `$ qas --add 'go,gum,main,https://github.com/charmbracelet/gum'`
-- log history of commands
-
-### Low
-
-- more management utilities
-- list current configuration.
-
-## History
-
-`qas` initially was a module of a bigger package called `cejo` extracted as
-standalone project to follow UNIX main rule: 'do one thing, well'.
-
-## License
+## LICENSE
 
 [GPL-v3](https://www.gnu.org/licenses/gpl-3.0.en.html)

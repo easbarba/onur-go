@@ -1,0 +1,11 @@
+.github
+tools
+.envrc
+CHANGELOG.md
+CONTRIBUTING.md
+LICENSE
+Makefile
+PROTOCOL.md
+README.md
+TODO.md
+manifest.scm

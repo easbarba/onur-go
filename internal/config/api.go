@@ -1,3 +1,16 @@
+// Qas is free software: you can redistribute it and/or modify
+// it under the terms of the GNU General Public License as published by
+// the Free Software Foundation, either version 3 of the License, or
+// (at your option) any later version.
+//
+// Qas is distributed in the hope that it will be useful,
+// but WITHOUT ANY WARRANTY; without even the implied warranty of
+// MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+// GNU General Public License for more details.
+//
+// You should have received a copy of the GNU General Public License
+// along with Qas. If not, see <https://www.gnu.org/licenses/>.
+
 package config
 
 import (
@@ -5,8 +18,9 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
-	"path"
 	"time"
+
+	"github.com/easbarba/qas/internal/common"
 )
 
 // Structure structure of Configuration files
@@ -24,10 +38,10 @@ type Structure []struct {
 const url = "http://localhost:5000/v1/config/list"
 
 // HomeFolder that all projects repositories will be stored at
-var HomeFolder string = path.Join(Home(), "Projects")
+var HomeFolder string = common.ProjectsFolder()
 
 // All configuration consumed from the qas API
-func All(verbose *bool) Structure {
+func AllAPI(verbose *bool) Structure {
 	qasClient := http.Client{
 		Timeout: time.Second * 2,
 	}
