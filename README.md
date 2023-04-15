@@ -1,16 +1,10 @@
 # Qas
 
-[![Actions Status](https://github.com/easbarba/qas-go/workflows/ci/badge.svg)](https://github.com/easbarba/qas-go/actions)
+[![building and testing](https://github.com/easbarba/qas_go/workflows/ci/badge.svg)](https://github.com/easbarba/qas_go/actions)
 
 Easily manage multiple FLOSS repositories
 
-# Installation
-
-`go install https://github.com/easbarba/qas-go@latest`.
-
-[api](https://github.com/easbarba/qas_api_go) |
-[php](https://github.com/easbarba/qas)
-[php-api](https://github.com/easbarba/qas_api) | [ruby](https://github.com/easbarba/qas.rb) |
+[php](https://github.com/easbarba/qas_php) | [api](https://github.com/easbarba/qas_api) | [ruby](https://github.com/easbarba/qas_rb)
 
 ## Usage
 
@@ -62,6 +56,10 @@ More examples of configuration files are at `docs/examples`.
 ## Options
 
 Consult `qas --help` for more options.
+
+# Installation
+
+`go install github.com/easbarba/qas-go@latest`
 
 ## GNU Guix
 

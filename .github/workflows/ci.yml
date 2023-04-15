@@ -1,0 +1,29 @@
+name: ci
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up Go
+        uses: actions/setup-go@v3
+        with:
+          go-version: 1.19
+
+      - name: set up config files
+        run: |
+          mkdir -pv ~/.config/qas
+          cp ./examples/* ~/.config/qas
+
+      - name: dependencies
+        run: go mod download
+
+      - name: Test
+        run: go test -v ./...
