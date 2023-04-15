@@ -3,6 +3,7 @@
 - local: add base functionalities
 - local: add tests
 - cli: use kong
+- actions: master branch as default
 
 ## [0.2.2] - 16/01/2023
 

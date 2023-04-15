@@ -36,6 +36,7 @@ var s = spinner.New(spinner.CharSets[26], 100*time.Millisecond)
 // Grab all project by pulling or cloning
 // TODO return error
 func Grab(verbose *bool) {
+	var branch string
 	projects := config.All() //verbose
 
 	for _, project := range projects {
@@ -43,12 +44,18 @@ func Grab(verbose *bool) {
 			name := strings.ToLower(pj.Name)
 			folder := path.Join(common.Home(), project.Lang, name)
 
-			printInfo(name, pj.URL, pj.Branch, verbose)
-
-			if _, err := os.Stat(path.Join(folder, ".git")); err == nil {
-				pull(folder, pj.URL, pj.Branch)
+			if pj.Branch == "" {
+				branch = "master"
 			} else {
-				clone(folder, pj.Name, pj.URL, pj.Branch)
+				branch = pj.Branch
+			}
+
+			printInfo(name, pj.URL, branch, verbose)
+
+			if _, err := os.Stat(path.Join(folder, ".git")); err != nil {
+				clone(folder, pj.Name, pj.URL, branch)
+			} else {
+				pull(folder, pj.URL, branch)
 			}
 		}
 	}
@@ -75,16 +82,12 @@ func clone(folder, name, url, branch string) {
 		quiet = os.Stdin
 	}
 
-	if branch == "" {
-		branch = "master"
-	}
-
-	branch = fmt.Sprintf("refs/heads/%s", branch)
+	branchHead := fmt.Sprintf("refs/heads/%s", branch)
 
 	spin.Start()
 	_, err := git.PlainClone(folder, false, &git.CloneOptions{
 		URL:           url,
-		ReferenceName: plumbing.ReferenceName(branch),
+		ReferenceName: plumbing.ReferenceName(branchHead),
 		Progress:      quiet,
 		SingleBranch:  singleBranch,
 		Depth:         depth,
@@ -129,9 +132,4 @@ func pull(folder, url, branch string) {
 		Progress:      quiet,
 	})
 	spin.Stop()
-
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
 }

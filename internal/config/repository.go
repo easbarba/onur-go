@@ -52,8 +52,14 @@ func All() []domain.Config {
 			continue
 		}
 
+		// ignore ini files
+		if ext := filepath.Ext(p); ext == ".ini" {
+			continue
+		}
+
 		configed, err := TranslateConfig(p, file.Name())
 		if err != nil {
+			fmt.Print(err)
 			continue // just ignore faulty/empty configs
 		}
 
