@@ -8,6 +8,7 @@
 - feat(settings): use user settings
 - feat: add local configuration finder
 - feat: grab: use new route
+- chore: rm early flag based cli
 
 ## [0.2.2] - 16/01/2023
 

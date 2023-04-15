@@ -13,10 +13,4 @@
 *  along with Qas. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package domain
-
-type Projects []struct {
-	Name   string `json:"name"`
-	Branch string `json:"branch"`
-	URL    string `json:"url"`
-}
+package config
