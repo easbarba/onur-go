@@ -54,12 +54,12 @@ func All() []domain.Config {
 
 		configed, err := TranslateConfig(p, file.Name())
 		if err != nil {
-			return nil
+			continue // just ignore faulty/empty configs
 		}
 
 		configs = append(configs, configed)
 	}
-	fmt.Print("foool")
+
 	return configs
 }
 
