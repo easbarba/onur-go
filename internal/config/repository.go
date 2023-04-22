@@ -52,8 +52,12 @@ func All() []domain.Config {
 			continue
 		}
 
-		// ignore ini files
+		// ignore ini files (legacy)
 		if ext := filepath.Ext(p); ext == ".ini" {
+			continue
+		}
+		// ignore toml files
+		if ext := filepath.Ext(p); ext == ".toml" {
 			continue
 		}
 

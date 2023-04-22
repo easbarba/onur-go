@@ -20,21 +20,28 @@ import (
 	"os"
 	"path"
 
-	"gopkg.in/ini.v1"
+	"github.com/BurntSushi/toml"
 )
 
-func ReadSettings() (bool, bool, int) {
-	settings := path.Join(Configfolder(), "settings.ini")
+type base struct {
+	singlebranch bool
+	depth        int
+}
 
-	cfg, err := ini.Load(settings)
+func ReadSettings() (bool, int) {
+	settings_location := path.Join(Configfolder(), "settings.toml")
+	if _, err := os.Stat(settings_location); err != nil {
+		fmt.Print("no configuration file found", err)
+		return true, 1
+	}
+
+	var conf base
+	_, err := toml.DecodeFile(settings_location, &conf)
 	if err != nil {
-		fmt.Printf("Fail to read file: %v", err)
+		fmt.Fprint(os.Stderr, err)
+		fmt.Println("")
 		os.Exit(1)
 	}
 
-	singleBranch := cfg.Section("common").Key("single-branch").MustBool(false)
-	quiet := cfg.Section("common").Key("quiet").MustBool(false)
-	depth := cfg.Section("common").Key("depth").MustInt(1)
-
-	return singleBranch, quiet, depth
+	return conf.singlebranch, conf.depth
 }

@@ -12,7 +12,7 @@
 # along with Qas. If not, see <https://www.gnu.org/licenses/>.
 
 .PHONY: imports grab vet test lint install deps coverage
-.DEFAULT_GOAL := build
+.DEFAULT_GOAL := test
 
 RUNNER ?= podman
 
@@ -20,19 +20,18 @@ OS :=linux
 ARCH := amd64
 
 NAME := qas
-MAIN := ./main.go
+MAIN := ./cmd/${NAME}/main.go
 DEST := ${HOME}/.local/bin
 
-IMAGE_NAME := ${USER}/${NAME}-dev:$(shell cat .version)
-IMAGE_NAME_DEV := ${USER}/${NAME}:$(shell cat .version)
+IMAGE_BUILD := ${USER}/${NAME}:$(shell cat .version)
 
 # ================================= CONTAINER
 
 image-build:
-	${RUNNER} build --file ./Containerfile --tag ${IMAGE_BUILD}
+	@${RUNNER} build --file ./Containerfile --tag ${IMAGE_BUILD}
 
 image-repl:
-	${RUNNER} run --rm -it -v ${PWD}:/app -w /app golang:latest bash
+	@${RUNNER} run --rm -it -v ${PWD}:/app -w /app golang:1 bash
 
 
 # ================================= UTILS
@@ -41,31 +40,35 @@ deps:
 	@go mod download
 
 imports:
-	goimports -l -w .
+	@goimports -l -w .
 
 coverage:
-	go test --cover ./... -coverprofile=coverage.out
+	@go test --cover ./... -coverprofile=coverage.out
 
 build: test
 	@GOARCH=$(ARCH) GOOS=$(OS) go build -race -ldflags "-extldflags '-static'" -o ${NAME} ${MAIN}
 
 install: build
-	mv -v ./${NAME} ${DEST}/${NAME}
+	@mv -v ./${NAME} ${DEST}/${NAME}
 
 lint:
-	golangci-lint run --enable-all internal cmd/pak
+	@golangci-lint run --enable-all internal cmd/pak
 
 clean:
-	go clean
-	rm ${NAME}
+	@go clean
+	@rm ${NAME}
 
 vet:
-	go vet ./...
+	@go vet ./...
+
+test:
+	@go test -v ./...
+
 
 # ================================= ACTIONS
 
 grab:
-	go run ./main.go grab
+	@go run ${MAIN} grab
 
 archive:
-	go run ./main.go archive meh,forevis,tar
+	@go run ${MAIN} archive meh,forevis,tar

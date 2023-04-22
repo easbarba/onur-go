@@ -66,6 +66,15 @@ A `qas` single configuration file:
 ]
 ```
 
+## Settings file
+
+You may too set the behavior of `qas` with the `settings.toml`
+
+```
+singlebranch = true
+depth = 2
+```
+
 More examples of configuration files are at `docs/examples`.
 
 ## Options

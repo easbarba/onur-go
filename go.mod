@@ -3,11 +3,11 @@ module github.com/easbarba/qas
 go 1.19
 
 require (
+	github.com/BurntSushi/toml v1.2.1
 	github.com/alecthomas/kong v0.7.1
 	github.com/briandowns/spinner v1.23.0
 	github.com/fatih/color v1.15.0
 	github.com/go-git/go-git/v5 v5.6.1
-	gopkg.in/ini.v1 v1.67.0
 )
 
 require (

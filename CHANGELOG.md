@@ -29,6 +29,8 @@ along with Qas. If not, see <https://www.gnu.org/licenses/>.
 - ci: add minimal github actions
 - feat: add logging
 - chore: clean up, and add license header
+- feat: rename actions to commands
+- settings: use toml
 
 ## [0.2.2] - 16/01/2023
 

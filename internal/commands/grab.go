@@ -66,14 +66,7 @@ func printInfo(name, url, branch string, verbose *bool) {
 
 // clone repository if none is found at folder
 func clone(folder, name, url, branch string) {
-	var quiet *os.File
-
-	singleBranch, quietRs, depth := common.ReadSettings()
-	if quietRs == true {
-		quiet = os.Stdout
-	} else {
-		quiet = os.Stdin
-	}
+	singleBranch, depth := common.ReadSettings()
 
 	branchHead := fmt.Sprintf("refs/heads/%s", branch)
 
@@ -81,7 +74,6 @@ func clone(folder, name, url, branch string) {
 	_, err := git.PlainClone(folder, false, &git.CloneOptions{
 		URL:           url,
 		ReferenceName: plumbing.ReferenceName(branchHead),
-		Progress:      quiet,
 		SingleBranch:  singleBranch,
 		Depth:         depth,
 	})
@@ -95,14 +87,8 @@ func clone(folder, name, url, branch string) {
 
 // pull repository at url/ and branch in the found folder
 func pull(folder, url, branch string) {
-	var quiet *os.File
 
-	singleBranch, quietRs, depth := common.ReadSettings()
-	if quietRs == true {
-		quiet = os.Stdout
-	} else {
-		quiet = os.Stdin
-	}
+	singleBranch, depth := common.ReadSettings()
 
 	o, err := git.PlainOpen(folder)
 	if err != nil {
@@ -122,7 +108,6 @@ func pull(folder, url, branch string) {
 		ReferenceName: plumbing.ReferenceName(branch),
 		SingleBranch:  singleBranch,
 		Depth:         depth,
-		Progress:      quiet,
 	})
 	spin.Stop()
 }

@@ -11,17 +11,12 @@
 # You should have received a copy of the GNU General Public License
 # along with Qas. If not, see <https://www.gnu.org/licenses/>.
 
-
 FROM golang:1.20 AS build
+MAINTAINER EAS Barbosa <easbarba@outlook.com>
 WORKDIR /app
 COPY go.mod go.sum ./
 RUN go mod download
-COPY . .
-ENV GOOS=linux GOARCH=amd64
-RUN go build -o ./qas ./cmd/qas/main.go
-
-FROM golang:1.20
-MAINTAINER EAS Barbosa <easbarba@outlook.com>
-COPY --from=build /app/qas /opt/qas
 COPY examples /root/.config/qas
-CMD [ "/opt/qas" ]
+RUN touch ~/.config/qas/emptyfile.json && ln -sf ~/nonexistentfile ~/.config/qas/baz.json
+COPY . .
+CMD [ "go", "test", "-v", "./..." ]
