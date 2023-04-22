@@ -31,14 +31,14 @@ IMAGE_NAME_DEV := ${USER}/${NAME}:$(shell cat .version)
 image-build:
 	${RUNNER} build --file ./Containerfile --tag ${IMAGE_BUILD}
 
-image-test:
-	${RUNNER} run --rm -it -v ${PWD}:/app -w /app golang:latest bash -c 'go mod download && mkdir -pv ~/.config/qas && cp -r ./examples/*.json ~/.config/qas && go test -v ./...'
+image-repl:
+	${RUNNER} run --rm -it -v ${PWD}:/app -w /app golang:latest bash
 
 
 # ================================= UTILS
 
 deps:
-	go mod download
+	@go mod download
 
 imports:
 	goimports -l -w .
@@ -47,7 +47,7 @@ coverage:
 	go test --cover ./... -coverprofile=coverage.out
 
 build: test
-	GOARCH=$(ARCH) GOOS=$(OS) go build -race -ldflags "-extldflags '-static'" -o ${NAME} ${MAIN}
+	@GOARCH=$(ARCH) GOOS=$(OS) go build -race -ldflags "-extldflags '-static'" -o ${NAME} ${MAIN}
 
 install: build
 	mv -v ./${NAME} ${DEST}/${NAME}

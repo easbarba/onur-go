@@ -22,4 +22,5 @@ tmp/
 # Go workspace file
 go.work
 
+# -------------- PROJECT
 .local

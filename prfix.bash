@@ -1,3 +1,5 @@
+#!/usr/bin/env bash
+
 # Qas is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -11,9 +13,6 @@
 # You should have received a copy of the GNU General Public License
 # along with Qas. If not, see <https://www.gnu.org/licenses/>.
 
-FROM golang:1.20 AS build
-WORKDIR /app
-COPY go.mod go.sum ./
-RUN go mod download
-COPY . .
-CMD [ "go", "test", "-v", "./..." ]
+go mod download
+go mod verify
+go mod tidy -v
