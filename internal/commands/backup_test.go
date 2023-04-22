@@ -11,4 +11,4 @@
 // You should have received a copy of the GNU General Public License
 // along with Qas. If not, see <https://www.gnu.org/licenses/>.
 
-package actions_test
+package commands_test

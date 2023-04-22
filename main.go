@@ -15,7 +15,7 @@ package main
 
 import (
 	"github.com/alecthomas/kong"
-	"github.com/easbarba/qas/internal/actions"
+	"github.com/easbarba/qas/internal/commands"
 )
 
 func main() {
@@ -41,7 +41,7 @@ type BackupCmd struct {
 }
 
 func (r *BackupCmd) Run(ctx *Context) error {
-	actions.Backup(&r.Packages, &r.Verbose)
+	commands.Backup(&r.Packages, &r.Verbose)
 	return nil
 }
 
@@ -50,6 +50,6 @@ type GrabCmd struct {
 }
 
 func (r *GrabCmd) Run(ctx *Context) error {
-	actions.Grab(&r.Verbose)
+	commands.Grab(&r.Verbose)
 	return nil
 }
