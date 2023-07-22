@@ -1,16 +1,16 @@
 /*
-*  Aba is free software: you can redistribute it and/or modify
+*  Onur is free software: you can redistribute it and/or modify
 *  it under the terms of the GNU General Public License as published by
 *  the Free Software Foundation, either version 3 of the License, or
 *  (at your option) any later version.
 
-*  Aba is distributed in the hope that it will be useful,
+*  Onur is distributed in the hope that it will be useful,
 *  but WITHOUT ANY WARRANTY; without even the implied warranty of
 *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 *  GNU General Public License for more details.
 
 *  You should have received a copy of the GNU General Public License
-*  along with Aba. If not, see <https://www.gnu.org/licenses/>.
+*  along with Onur. If not, see <https://www.gnu.org/licenses/>.
  */
 
 package config
@@ -24,15 +24,15 @@ import (
 	"os"
 	"path"
 
-	"github.com/easbarba/qas/internal/common"
-	"github.com/easbarba/qas/internal/domain"
+	"github.com/easbarba/onur/internal/common"
+	"github.com/easbarba/onur/internal/domain"
 )
 
 // return all files found
 func Files() []fs.FileInfo {
-	qasFolder := common.Configfolder()
+	onurFolder := common.Configfolder()
 
-	files, err := ioutil.ReadDir(qasFolder)
+	files, err := ioutil.ReadDir(onurFolder)
 	if err != nil {
 		fmt.Printf("Warning: no configuration file found, exiting!")
 		os.Exit(1)

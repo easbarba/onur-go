@@ -1,15 +1,15 @@
-// Qas is free software: you can redistribute it and/or modify
+// Onur is free software: you can redistribute it and/or modify
 // it under the terms of the GNU General Public License as published by
 // the Free Software Foundation, either version 3 of the License, or
 // (at your option) any later version.
 //
-// Qas is distributed in the hope that it will be useful,
+// Onur is distributed in the hope that it will be useful,
 // but WITHOUT ANY WARRANTY; without even the implied warranty of
 // MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 // GNU General Public License for more details.
 //
 // You should have received a copy of the GNU General Public License
-// along with Qas. If not, see <https://www.gnu.org/licenses/>.
+// along with Onur. If not, see <https://www.gnu.org/licenses/>.
 
 package config
 
@@ -20,7 +20,7 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/easbarba/qas/internal/common"
+	"github.com/easbarba/onur/internal/common"
 )
 
 // Structure structure of Configuration files
@@ -40,9 +40,9 @@ const url = "http://localhost:5000/v1/config/list"
 // HomeFolder that all projects repositories will be stored at
 var HomeFolder string = common.ProjectsFolder()
 
-// All configuration consumed from the qas API
+// All configuration consumed from the onur API
 func AllAPI(verbose *bool) Structure {
-	qasClient := http.Client{
+	onurClient := http.Client{
 		Timeout: time.Second * 2,
 	}
 
@@ -51,9 +51,9 @@ func AllAPI(verbose *bool) Structure {
 		log.Fatal(err)
 	}
 
-	req.Header.Set("User-Agent", "qas")
+	req.Header.Set("User-Agent", "onur")
 
-	res, getErr := qasClient.Do(req)
+	res, getErr := onurClient.Do(req)
 	if getErr != nil {
 		log.Fatal(getErr)
 	}
