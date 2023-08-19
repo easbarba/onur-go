@@ -15,43 +15,41 @@ package commands
 
 import (
 	"fmt"
-	"path"
-	"strings"
-	"time"
+	// "path"
+	// "strings"
 
-	"github.com/briandowns/spinner"
 	"github.com/easbarba/onur/internal/common"
-	"github.com/easbarba/onur/internal/config"
+	// "github.com/easbarba/onur/internal/database"
 )
 
 var backupFolder string = common.BackupFolder()
-var spin = spinner.New(spinner.CharSets[26], 100*time.Millisecond)
 
 // Archive will zip repositories and place $DOWNLOADS/archived
 func Backup(list *string, verbose *bool) {
-	configs := config.All() // verbose
-	projectsList := strings.Split(*list, ",")
+	// projectsList := strings.Split(*list, ",")
+	// databases, err := database.All() // verbose
+	// if err != nil {
+	// 	println(err)
+	// }
 
 	if *verbose {
 		fmt.Printf("\nArchiving at %s\n", backupFolder)
 	}
 
-	for _, config := range configs {
-		for _, p := range config.Projects {
-			for _, m := range projectsList {
-				if p.Name == path.Base(m) {
-					do(m)
-				}
-			}
-		}
-	}
+	// for database, _ := range databases {
+	// 	for _, p := range database.Projects {
+	// 		for _, m := range projectsList {
+	// 			if p.Name == path.Base(m) {
+	// 				do(m)
+	// 			}
+	// 		}
+	// 	}
+	// }
 }
 
 // TODO: mkdir archive folder
 // TODO: archive to zip by default
 // TODO: store at archive folder
 func do(project string) {
-	spin.Start()
 	fmt.Println(project)
-	spin.Stop()
 }

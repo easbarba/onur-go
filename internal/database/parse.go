@@ -13,7 +13,7 @@
 *  along with Onur. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package config
+package database
 
 import (
 	"encoding/json"
@@ -29,26 +29,51 @@ import (
 // returns either properly parsed config parsed or empty struct.
 //
 //	TODO: check if the expect syntax is correct TODO: or err.
-func ParseConfig(filepath string, filename string) (domain.Config, error) {
-	var projects domain.Projects
-
+func One(filepath string) ([]domain.Projects, error) {
 	file, err := os.ReadFile(filepath)
 	if err != nil {
-		return domain.Config{}, err
+		return []domain.Projects{}, err
 	}
 
-	err = json.Unmarshal(file, &projects)
+	projects, err := parse(file)
 	if err != nil {
-		errMsg := fmt.Sprintf("Configuration file has incorrect syntax \n%s", err.Error())
-		return domain.Config{}, errors.New(errMsg)
+		return []domain.Projects{}, err
 	}
 
-	config := domain.Config{
-		Lang:     common.FileNameWithoutExtension(filename),
-		Projects: projects,
+	return projects, nil
+}
+
+func All() ([]domain.Config, error) {
+	var configs []domain.Config
+
+	for _, filepath := range Files() {
+		one, err := One(filepath)
+		if err != nil {
+
+			return []domain.Config{}, err
+		}
+
+		config := domain.Config{
+			Topic:    common.FileNameWithoutExtension(filepath),
+			Projects: one,
+		}
+
+		configs = append(configs, config)
 	}
 
-	return config, nil
+	return configs, nil
+}
+
+func parse(file []byte) ([]domain.Projects, error) {
+	var projects []domain.Projects
+
+	if err := json.Unmarshal(file, &projects); err != nil {
+		errMessage := fmt.Sprintf("Configuration file has incorrect syntax \n%s", err.Error())
+
+		return []domain.Projects{}, errors.New(errMessage)
+	}
+
+	return projects, nil
 }
 
 // TODO: Check for duplicates in configuration files

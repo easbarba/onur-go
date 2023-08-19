@@ -19,12 +19,9 @@ import (
 	"path"
 	"strings"
 
-	"github.com/fatih/color"
-	"github.com/go-git/go-git/v5"
-	"github.com/go-git/go-git/v5/plumbing"
-
+	"github.com/easbarba/onur/internal/actions"
 	"github.com/easbarba/onur/internal/common"
-	"github.com/easbarba/onur/internal/config"
+	"github.com/easbarba/onur/internal/database"
 )
 
 // TODO: After grabbing informations log
@@ -32,12 +29,20 @@ import (
 // Grab all project by pulling or cloning
 // TODO return error
 func Grab(verbose *bool) {
-	projects := config.All()
+	projects, err := database.All()
+	if err != nil {
+		println(err.Error())
+		os.Exit(1)
+	}
 
 	for _, project := range projects {
+		fmt.Println()
+		fmt.Println(project.Topic)
+		fmt.Println()
+
 		for _, pj := range project.Projects {
 			name := strings.ToLower(pj.Name)
-			folder := path.Join(common.ProjectsFolder(), project.Lang, name)
+			folder := path.Join(common.ProjectsFolder(), project.Topic, name)
 
 			if pj.Branch == "" {
 				pj.Branch = "master"
@@ -46,68 +51,20 @@ func Grab(verbose *bool) {
 			printInfo(name, pj.URL, pj.Branch, verbose)
 
 			if _, err := os.Stat(path.Join(folder, ".git")); err != nil {
-				clone(folder, pj.Name, pj.URL, pj.Branch)
+				actions.Klone(folder, pj.Name, pj.URL, pj.Branch)
 			} else {
-				pull(folder, pj.URL, pj.Branch)
+				actions.Pull(folder, pj.URL, pj.Branch)
 			}
 		}
 	}
 }
 
 func printInfo(name, url, branch string, verbose *bool) {
-	title := color.New(color.FgHiYellow, color.Bold).SprintFunc()
+	message := name
+
 	if *verbose {
-		fmt.Print(title("name: "), name, title(" url: "), url, title(" branch: "), branch, "\n")
-		return
+		message += " - " + url + " - " + branch
 	}
 
-	fmt.Print(title("name: "), name, "\n")
-}
-
-// clone repository if none is found at folder
-func clone(folder, name, url, branch string) {
-	singleBranch, depth := common.ReadSettings()
-
-	branchHead := fmt.Sprintf("refs/heads/%s", branch)
-
-	spin.Start()
-	_, err := git.PlainClone(folder, false, &git.CloneOptions{
-		URL:           url,
-		ReferenceName: plumbing.ReferenceName(branchHead),
-		SingleBranch:  singleBranch,
-		Depth:         depth,
-	})
-	spin.Stop()
-
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
-}
-
-// pull repository at url/ and branch in the found folder
-func pull(folder, url, branch string) {
-
-	singleBranch, depth := common.ReadSettings()
-
-	o, err := git.PlainOpen(folder)
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
-
-	w, err := o.Worktree()
-	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
-	}
-
-	spin.Start()
-	w.Pull(&git.PullOptions{
-		RemoteName:    "origin",
-		ReferenceName: plumbing.ReferenceName(branch),
-		SingleBranch:  singleBranch,
-		Depth:         depth,
-	})
-	spin.Stop()
+	fmt.Println(message)
 }

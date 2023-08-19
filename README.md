@@ -15,11 +15,9 @@ along with Onur. If not, see <https://www.gnu.org/licenses/>.
 
 # Onur
 
-[![building and testing](https://github.com/easbarba/onur_go/workflows/ci/badge.svg)](https://github.com/easbarba/onur_go/actions)
-
 Easily manage multiple FLOSS repositories
 
-[php](https://github.com/easbarba/onur_php) | [api](https://github.com/easbarba/onur_api) | [ruby](https://github.com/easbarba/onur_rb)
+[rust](https://github.com/easbarba/onur-rust) | [java](https://github.com/easbarba/onur-java) | [python](https://github.com/easbarba/onur-python) | [php](https://github.com/easbarba/onur-php) | [ruby](https://github.com/easbarba/onur-ruby)
 
 ## Usage
 
@@ -66,13 +64,14 @@ A `onur` single configuration file:
 ]
 ```
 
-## Settings file
+## Settings
 
-You may too set the behavior of `onur` with the `settings.toml`
+A TOML settings file may define the behavior of `onur`:
 
-```
-singlebranch = true
-depth = 2
+```toml
+single-branch = true
+quiet = true
+depth = 1
 ```
 
 More examples of configuration files are at `docs/examples`.

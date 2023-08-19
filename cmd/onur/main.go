@@ -27,8 +27,8 @@ func main() {
 var cli struct {
 	Debug bool `help:"Enable debug mode."`
 
-	Backup BackupCmd `cmd help:"clean system residual packages dependencies"`
-	Grab   GrabCmd   `cmd help:"install dependencies packages of package"`
+	Backup BackupCmd `cmd help:"compress selected projects"`
+	Grab   GrabCmd   `cmd help:"grab all projects"`
 }
 
 type Context struct {

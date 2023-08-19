@@ -23,25 +23,27 @@ import (
 	"github.com/BurntSushi/toml"
 )
 
-type base struct {
-	singlebranch bool
-	depth        int
+type Settings struct {
+	SingleBranch bool `toml:"single_branch"`
+	Quiet        bool `toml:"quiet"`
+	Depth        int  `toml:"depth"`
 }
 
-func ReadSettings() (bool, int) {
-	settings_location := path.Join(Configfolder(), "settings.toml")
-	if _, err := os.Stat(settings_location); err != nil {
+func ReadSettings() Settings {
+	settingsFile := path.Join(Configfolder(), "settings.toml")
+	if _, err := os.Stat(settingsFile); err != nil {
 		fmt.Print("no configuration file found", err)
-		return true, 1
+		return Settings{true, true, 1}
 	}
 
-	var conf base
-	_, err := toml.DecodeFile(settings_location, &conf)
+	var settings Settings
+	_, err := toml.DecodeFile(settingsFile, &settings)
 	if err != nil {
 		fmt.Fprint(os.Stderr, err)
 		fmt.Println("")
+
 		os.Exit(1)
 	}
 
-	return conf.singlebranch, conf.depth
+	return settings
 }

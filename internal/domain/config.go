@@ -17,6 +17,6 @@ package domain
 
 // Configuration files structure
 type Config struct {
-	Lang     string `json:"lang"`
-	Projects `json:"projects"`
+	Topic    string     `json:"topic"`
+	Projects []Projects `json:"projects"`
 }

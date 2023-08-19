@@ -15,6 +15,10 @@ along with Onur. If not, see <https://www.gnu.org/licenses/>.
 
 # CHANGELOG
 
+## 0.4.0
+
+- refactor: rename modules and reorganize
+
 ## 0.3.0
 
 - local: add base functionalities

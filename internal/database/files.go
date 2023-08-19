@@ -13,41 +13,62 @@
 *  along with Onur. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package config
+package database
 
 import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/fs"
-	"io/ioutil"
 	"os"
 	"path"
+	"path/filepath"
 
 	"github.com/easbarba/onur/internal/common"
 	"github.com/easbarba/onur/internal/domain"
 )
 
 // return all files found
-func Files() []fs.FileInfo {
-	onurFolder := common.Configfolder()
+func Files() []string {
+	var files []string
 
-	files, err := ioutil.ReadDir(onurFolder)
+	entries, err := os.ReadDir(common.Configfolder())
 	if err != nil {
 		fmt.Printf("Warning: no configuration file found, exiting!")
 		os.Exit(1)
 	}
 
+	for _, file := range entries {
+		fileAbsPath := path.Join(common.Configfolder(), file.Name())
+
+		if ext := filepath.Ext(fileAbsPath); ext == ".json" { // only json files
+			if _, err := os.Stat(fileAbsPath); err == nil || !os.IsNotExist(err) { // check if file exist
+				files = append(files, fileAbsPath)
+			}
+		}
+	}
+
 	return files
+}
+
+func Count() bool {
+	panic("not implement!")
+}
+
+func exist() {
+	panic("not implemented")
+}
+
+func to_path() {
+	panic("not implemented")
 }
 
 // Write new configuration to a json file
 func writeNewConfig(newConfig domain.Config) error {
-	configs := All()
+	configs, err := All()
 
 	// Check if any configuration has already Lang set, and skip it!
 	for _, config := range configs {
-		if config.Lang == newConfig.Lang {
+		if config.Topic == newConfig.Topic {
 			return errors.New("Configuration already exist. Skipping!")
 		}
 	}
@@ -57,8 +78,8 @@ func writeNewConfig(newConfig domain.Config) error {
 
 	cfgFolder := common.Configfolder()
 
-	newConfigPath := path.Join(cfgFolder, newConfig.Lang+".json")
-	err := os.WriteFile(newConfigPath, file, 0644)
+	newConfigPath := path.Join(cfgFolder, newConfig.Topic+". json")
+	err = os.WriteFile(newConfigPath, file, 0644)
 	if err != nil {
 		return errors.New(err.Error())
 	}
@@ -67,13 +88,34 @@ func writeNewConfig(newConfig domain.Config) error {
 }
 
 func RemoveConfig(lang string) error {
-	cfgFolder := common.Configfolder()
+	configFolder := common.Configfolder()
 
-	configPath := path.Join(cfgFolder, lang+".json")
+	configPath := path.Join(configFolder, lang+".json")
 	err := os.Remove(configPath)
 	if err != nil {
 		return err
 	}
 
 	return nil
+}
+
+// Bundle configurations as a JSON array
+func AllToJson() ([]byte, error) {
+	// mapped := make(map[string]domain.Projects)
+
+	configs, err := All()
+	if err != nil {
+		return nil, err
+	}
+
+	// for _, config := range configs {
+	// 	mapped[config.Lang] = config.Projects
+	// }
+
+	result, err := json.Marshal(configs)
+	if err != nil {
+		return nil, errors.New(err.Error())
+	}
+
+	return result, nil
 }
