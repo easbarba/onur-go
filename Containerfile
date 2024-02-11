@@ -11,12 +11,11 @@
 # You should have received a copy of the GNU General Public License
 # along with Onur. If not, see <https://www.gnu.org/licenses/>.
 
-FROM golang:1.20 AS build
+FROM golang:1.21
 MAINTAINER EAS Barbosa <easbarba@outlook.com>
 WORKDIR /app
 COPY go.mod go.sum ./
-RUN go mod download
-COPY examples /root/.config/onur
-RUN touch ~/.config/onur/emptyfile.json && ln -sf ~/nonexistentfile ~/.config/onur/baz.json
+RUN go mod tidy
+RUN ./prepare.bash
 COPY . .
 CMD [ "go", "test", "-v", "./..." ]

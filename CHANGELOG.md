@@ -17,6 +17,7 @@ along with Onur. If not, see <https://www.gnu.org/licenses/>.
 
 ## 0.4.0
 
+- chore: clean up and bump deps
 - refactor: rename modules and reorganize
 
 ## 0.3.0

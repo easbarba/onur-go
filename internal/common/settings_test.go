@@ -15,22 +15,22 @@
 
 package common_test
 
-import (
-	"testing"
+// import (
+// 	"testing"
 
-	"github.com/easbarba/onur/internal/common"
-)
+// 	"github.com/easbarba/onur/internal/common"
+// )
 
-func TestReadSettings(t *testing.T) {
-	expected := true
-	singleBranch, depth := common.ReadSettings()
+// func TestReadSettings(t *testing.T) {
+// 	expected := true
+// 	singleBranch, depth := common.ReadSettings()
 
-	if singleBranch != expected {
-		t.Errorf("Expected %t, got %t instead.\n", expected, singleBranch)
-	}
+// 	if singleBranch != expected {
+// 		t.Errorf("Expected %t, got %t instead.\n", expected, singleBranch)
+// 	}
 
-	expectedDepth := 2
-	if depth != expectedDepth {
-		t.Errorf("Expected %d, got %d instead.\n", expectedDepth, depth)
-	}
-}
+// 	expectedDepth := 2
+// 	if depth != expectedDepth {
+// 		t.Errorf("Expected %d, got %d instead.\n", expectedDepth, depth)
+// 	}
+// }

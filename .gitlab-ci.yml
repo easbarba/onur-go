@@ -1,0 +1,10 @@
+stages:
+  - test
+
+Integration Testing:
+  stage: test
+  image: golang:1.21
+  script:
+    - ./prepare.bash
+    - go mod tidy
+    - go test -v ./...

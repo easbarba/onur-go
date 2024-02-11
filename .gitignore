@@ -23,4 +23,5 @@ tmp/
 go.work
 
 # -------------- PROJECT
-.local
+/.local
+/vendor

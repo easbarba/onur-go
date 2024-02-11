@@ -17,7 +17,7 @@ along with Onur. If not, see <https://www.gnu.org/licenses/>.
 
 Easily manage multiple FLOSS repositories
 
-[rust](https://github.com/easbarba/onur-rust) | [java](https://github.com/easbarba/onur-java) | [python](https://github.com/easbarba/onur-python) | [php](https://github.com/easbarba/onur-php) | [ruby](https://github.com/easbarba/onur-ruby)
+[c](https://gitlab.com/easbarba/onur) | [rust](https://gitlab.com/easbarba/onur-rust) | [python](https://gitlab.com/easbarba/onur-python) | [php](https://gitlab.com/easbarba/onur-php) | [java](https://gitlab.com/easbarba/onur-java) | [ruby](https://gitlab.com/easbarba/onur-ruby)
 
 ## Usage
 
