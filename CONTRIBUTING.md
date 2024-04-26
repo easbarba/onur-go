@@ -21,7 +21,10 @@ Contributions are welcome via pull request.
 
 Please make sure to successfully check-up the guidelines list before sending a PR:
 
-- run `./prfix.bash`
-- run tests
+- check for updates 
+```sh
+```
+
+- run usual checkers with `./prfix.bash`: 
 - add due entries changes in `CHANGELOG.md`
 - tag per [SemVer](http://semver.org/).

@@ -15,8 +15,8 @@
 
 package domain
 
-// Configuration files structure
+type Topic map[string][]Projects
 type Config struct {
-	Topic    string     `json:"topic"`
-	Projects []Projects `json:"projects"`
+	Name  string `json:"name"`
+	Topic Topic  `json:"topic"`
 }

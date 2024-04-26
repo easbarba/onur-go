@@ -12,7 +12,7 @@
 ;; along with Onur. If not, see <https://www.gnu.org/licenses/>.
 
 (specifications->manifest
- '("go@1.20"
+ '("go@1.21"
    "libgit2"
    "make"
    "nano"

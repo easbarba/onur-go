@@ -1,16 +1,19 @@
-[
-    {
-        "name": "guzzle",
-        "url": "https://github.com/guzzle/guzzle"
-    },
-    {
-        "name": "github-gitignore",
-        "branch": "main",
-        "url": "https://github.com/github/gitignore"
-    },
-    {
-        "name": "makefiletutorial",
-        "branch": "gh-pages",
-        "url": "https://github.com/theicfire/makefiletutorial"
-    }
-]
+{
+    "main": [
+        {
+            "name": "jakartaee-rest",
+            "url": "https://github.com/jakartaee/rest",
+            "branch": "main"
+        },
+        {
+            "name": "github-gitignore",
+            "branch": "main",
+            "url": "https://github.com/github/gitignore"
+        },
+        {
+            "name": "makefiletutorial",
+            "branch": "gh-pages",
+            "url": "https://github.com/theicfire/makefiletutorial"
+        }
+    ]
+}

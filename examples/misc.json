@@ -1,15 +1,18 @@
-[
-    {
-        "name": "awesomewm",
-        "url": "https://github.com/awesomeWM/awesome"
-    },
-    {
-        "name": "nuxt",
-        "branch": "main",
-        "url": "https://github.com/nuxt/framework"
-    },
-    {
-        "name": "swift_format",
-        "url": "https://github.com/apple/swift-format"
-    }
-]
+{
+    "oss": [
+        {
+            "name": "awesomewm",
+            "url": "https://github.com/awesomeWM/awesome"
+        },
+        {
+            "name": "nuxt",
+            "branch": "main",
+            "url": "https://github.com/nuxt/framework"
+        },
+        {
+            "name": "swift_format",
+            "url": "https://github.com/apple/swift-format",
+            "branch": "main"
+        }
+    ]
+}

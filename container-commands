@@ -1,0 +1,13 @@
+onur grab
+onur archive nuxt,awesomewm,git
+onur --help
+
+go mod download
+go mod tidy
+go test -v ./...
+go test --cover ./... -coverprofile=coverage.out
+go run ./cmd/onur/
+go clean
+
+goimports -l -w .
+golangci-lint run --enable-all internal cmd/pak

@@ -29,18 +29,18 @@ import (
 // returns either properly parsed config parsed or empty struct.
 //
 //	TODO: check if the expect syntax is correct TODO: or err.
-func One(filepath string) ([]domain.Projects, error) {
+func One(filepath string) (domain.Topic, error) {
 	file, err := os.ReadFile(filepath)
 	if err != nil {
-		return []domain.Projects{}, err
+		return domain.Topic{}, err
 	}
 
-	projects, err := parse(file)
+	subtopics, err := parse(file)
 	if err != nil {
-		return []domain.Projects{}, err
+		return domain.Topic{}, err
 	}
 
-	return projects, nil
+	return subtopics, nil
 }
 
 func All() ([]domain.Config, error) {
@@ -49,13 +49,12 @@ func All() ([]domain.Config, error) {
 	for _, filepath := range Files() {
 		one, err := One(filepath)
 		if err != nil {
-
 			return []domain.Config{}, err
 		}
 
 		config := domain.Config{
-			Topic:    common.FileNameWithoutExtension(filepath),
-			Projects: one,
+			Name:  common.FileNameWithoutExtension(filepath),
+			Topic: one,
 		}
 
 		configs = append(configs, config)
@@ -64,16 +63,16 @@ func All() ([]domain.Config, error) {
 	return configs, nil
 }
 
-func parse(file []byte) ([]domain.Projects, error) {
-	var projects []domain.Projects
+func parse(file []byte) (domain.Topic, error) {
+	var subtopics domain.Topic
 
-	if err := json.Unmarshal(file, &projects); err != nil {
+	if err := json.Unmarshal(file, &subtopics); err != nil {
 		errMessage := fmt.Sprintf("Configuration file has incorrect syntax \n%s", err.Error())
 
-		return []domain.Projects{}, errors.New(errMessage)
+		return domain.Topic{}, errors.New(errMessage)
 	}
 
-	return projects, nil
+	return subtopics, nil
 }
 
 // TODO: Check for duplicates in configuration files

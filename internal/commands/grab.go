@@ -29,42 +29,45 @@ import (
 // Grab all project by pulling or cloning
 // TODO return error
 func Grab(verbose *bool) {
-	projects, err := database.All()
+	settings := common.ReadSettings()
+	fmt.Println(fmt.Sprintf(`settings { depth: %d, quiet: %t, single-branch: %t }`, settings.Depth, settings.Quiet, settings.SingleBranch))
+
+	allProjects, err := database.All()
 	if err != nil {
 		println(err.Error())
 		os.Exit(1)
 	}
 
-	for _, project := range projects {
+	for _, project := range allProjects {
 		fmt.Println()
-		fmt.Println(project.Topic)
-		fmt.Println()
+		fmt.Println(fmt.Sprintf(`> %s`, project.Name))
 
-		for _, pj := range project.Projects {
-			name := strings.ToLower(pj.Name)
-			folder := path.Join(common.ProjectsFolder(), project.Topic, name)
+		for key, topic := range project.Topic {
+			fmt.Println(fmt.Sprintf(`  + %s`, key))
 
-			if pj.Branch == "" {
-				pj.Branch = "master"
+			for _, projekt := range topic {
+				name := strings.ToLower(projekt.Name)
+				folder := path.Join(common.ProjectsFolder(), project.Name, key, name)
+
+				if projekt.Branch == "" {
+					projekt.Branch = "master"
+				}
+
+				projectInfo(name, projekt.URL, projekt.Branch)
+
+				if _, err := os.Stat(path.Join(folder, ".git", "config")); err != nil {
+					actions.Klone(folder, projekt.Name, projekt.URL, projekt.Branch)
+				} else {
+					actions.Pull(folder, projekt.URL, projekt.Branch)
+				}
 			}
 
-			printInfo(name, pj.URL, pj.Branch, verbose)
-
-			if _, err := os.Stat(path.Join(folder, ".git")); err != nil {
-				actions.Klone(folder, pj.Name, pj.URL, pj.Branch)
-			} else {
-				actions.Pull(folder, pj.URL, pj.Branch)
-			}
+			fmt.Println()
 		}
 	}
 }
 
-func printInfo(name, url, branch string, verbose *bool) {
-	message := name
-
-	if *verbose {
-		message += " - " + url + " - " + branch
-	}
-
+func projectInfo(name, url, branch string) {
+	message := fmt.Sprintf(`    - %-35s %-75s  %s`, name, url, branch)
 	fmt.Println(message)
 }

@@ -22,6 +22,7 @@ import (
 	"os"
 	"path"
 	"path/filepath"
+	"strings"
 
 	"github.com/easbarba/onur/internal/common"
 	"github.com/easbarba/onur/internal/domain"
@@ -29,7 +30,9 @@ import (
 
 // return all files found
 func Files() []string {
-	var files []string
+	var result []string
+	cfg_extension := ".json"
+	fmt.Print("Configurations: [ ")
 
 	entries, err := os.ReadDir(common.Configfolder())
 	if err != nil {
@@ -38,16 +41,38 @@ func Files() []string {
 	}
 
 	for _, file := range entries {
-		fileAbsPath := path.Join(common.Configfolder(), file.Name())
+		cfgpath := path.Join(common.Configfolder(), file.Name())
 
-		if ext := filepath.Ext(fileAbsPath); ext == ".json" { // only json files
-			if _, err := os.Stat(fileAbsPath); err == nil || !os.IsNotExist(err) { // check if file exist
-				files = append(files, fileAbsPath)
-			}
+		if ext := filepath.Ext(cfgpath); ext != cfg_extension {
+			continue
 		}
+
+		// check if file exist
+		if _, err := os.Stat(cfgpath); err != nil || os.IsNotExist(err) {
+			continue
+		}
+
+		// check if file is empty
+		file, err := os.Open(cfgpath)
+		if err != nil {
+			continue
+		}
+		defer file.Close()
+
+		info, err := file.Stat()
+		if err != nil {
+			continue
+		}
+		if info.Size() == 0 {
+			continue
+		}
+
+		fmt.Printf(" %s ", strings.TrimSuffix(filepath.Base(cfgpath), cfg_extension))
+		result = append(result, cfgpath)
 	}
 
-	return files
+	fmt.Println(" ]")
+	return result
 }
 
 func Count() bool {
@@ -68,17 +93,17 @@ func writeNewConfig(newConfig domain.Config) error {
 
 	// Check if any configuration has already Lang set, and skip it!
 	for _, config := range configs {
-		if config.Topic == newConfig.Topic {
+		if config.Name == newConfig.Name {
 			return errors.New("Configuration already exist. Skipping!")
 		}
 	}
 
 	// Write new configuration to file
-	file, _ := json.Marshal(newConfig.Projects)
+	file, _ := json.Marshal(newConfig.Topic)
 
 	cfgFolder := common.Configfolder()
 
-	newConfigPath := path.Join(cfgFolder, newConfig.Topic+". json")
+	newConfigPath := path.Join(cfgFolder, newConfig.Name+". json")
 	err = os.WriteFile(newConfigPath, file, 0644)
 	if err != nil {
 		return errors.New(err.Error())

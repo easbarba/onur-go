@@ -1,0 +1,12 @@
+{
+    "lua": [
+        {
+            "name": "lua-repl",
+            "url": "https://github.com/hoelzro/lua-repl"
+        },
+        {
+            "name": "lua",
+            "url": "https://github.com/lua/lua"
+        }
+    ]
+}

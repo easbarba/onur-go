@@ -1,11 +1,10 @@
 .github
-tools
 .envrc
+.local
 CHANGELOG.md
 CONTRIBUTING.md
-LICENSE
-Makefile
 PROTOCOL.md
-README.md
 TODO.md
 manifest.scm
+vendor
+tools

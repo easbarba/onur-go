@@ -1,10 +1,13 @@
+image: registry.gitlab.com/easbarba/onur-go:0.4.0
+
 stages:
   - test
 
+before_script:
+  - ./prepare.bash
+
 Integration Testing:
   stage: test
-  image: golang:1.21
   script:
-    - ./prepare.bash
     - go mod tidy
     - go test -v ./...
