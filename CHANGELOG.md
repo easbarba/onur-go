@@ -15,6 +15,10 @@ along with Onur. If not, see <https://www.gnu.org/licenses/>.
 
 # CHANGELOG
 
+## 0.5.0
+
+- feat: add config management
+
 ## 0.4.0
 
 - feat: new config structure

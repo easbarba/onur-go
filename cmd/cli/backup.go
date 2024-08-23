@@ -11,15 +11,12 @@
 // You should have received a copy of the GNU General Public License
 // along with Onur. If not, see <https://www.gnu.org/licenses/>.
 
-package commands
+package main
 
 import (
 	"fmt"
-	// "path"
-	// "strings"
 
-	"github.com/easbarba/onur/internal/common"
-	// "github.com/easbarba/onur/internal/database"
+	"gitlab.com/easbarba/onur/internal/common"
 )
 
 var backupFolder string = common.BackupFolder()

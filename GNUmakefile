@@ -19,49 +19,56 @@ OS :=linux
 ARCH := amd64
 
 NAME := onur
-MAIN := ./cmd/${NAME}/main.go
 DEST := ${HOME}/.local/bin
 
 RUNNER ?= podman
-VERSION := $(shell cat .version meson.build)
-CONTAINER_IMAGE := registry.gitlab.com/${USER}/${NAME}:${VERSION}
+VERSION := $(shell cat .version)
+CONTAINER_IMAGE := registry.gitlab.com/${USER}/${NAME}-go:${VERSION}
 
 # ================================= MANAGEMENT
 
-.PHONY: deps
-deps:
+.PHONY: local.deps
+local.deps:
 	@go mod download
 
-.PHONY: imports
-imports:
+.PHONY: local.imports
+local.imports:
 	@goimports -l -w .
 
-.PHONY: imports
-coverage:
+.PHONY: local.coverage
+local.coverage:
 	@go test --cover ./... -coverprofile=coverage.out
 
-.PHONY: lint
-lint:
+.PHONY: local.lint
+local.lint:
 	@golangci-lint run --enable-all internal cmd/pak
 
-.PHONY: loca.build
+.PHONY: local.build
 local.build:
-	GOARCH=$(ARCH) GOOS=$(OS) go build -race -ldflags "-extldflags '-static'" -o ${NAME} ${MAIN}
+	GOARCH=$(ARCH) GOOS=$(OS) go build -race -ldflags "-extldflags '-static'" -o ${NAME} ./cmd/cli/*
 
-.PHONY: loca.install
+.PHONY: local.install
 local.install: local.build
 	@mv -v ./${NAME} ${DEST}/${NAME}
 
-.PHONY: loca.clean
+.PHONY: local.clean
 local.clean:
 	@go clean
 	@rm ${NAME}
 
+.PHONY: local.test
+local.test:
+	go test -v ./internal/... ./cmd/...
+
 # ================================= CONTAINER
 
-.PHONY: image.build
-image.build:
-	${RUNNER} build --file ./Containerfile --tag ${CONTAINER_IMAGE} --env ONUR_VERSION=${VERSION}
+.PHONY: image.build.dev
+image.build.dev:
+	${RUNNER} build --file ./Containerfile-dev --tag ${CONTAINER_IMAGE} --env ONUR_VERSION=${VERSION}
+
+.PHONY: image.build.prod
+image.build.prod:
+	${RUNNER} build --file ./Containerfile-prod --tag ${CONTAINER_IMAGE} --env ONUR_VERSION=${VERSION}
 
 .PHONY: image.repl
 image.repl:
@@ -80,7 +87,3 @@ image.commands:
 		--volume ${PWD}:/app:Z \
 		--workdir /home/easbarba/app \
 		${CONTAINER_IMAGE} bash -c "$(shell cat ./container-commands | fzf)"
-
-
-test:
-	go test -v ./internal/... ./cmd/...

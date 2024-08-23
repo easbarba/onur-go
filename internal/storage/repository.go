@@ -13,7 +13,7 @@
 *  along with Onur. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package database
+package storage
 
 import (
 	"encoding/json"
@@ -22,17 +22,15 @@ import (
 	"os"
 	"path"
 	"path/filepath"
-	"strings"
 
-	"github.com/easbarba/onur/internal/common"
-	"github.com/easbarba/onur/internal/domain"
+	"gitlab.com/easbarba/onur/internal/common"
+	"gitlab.com/easbarba/onur/internal/domain"
 )
 
 // return all files found
 func Files() []string {
 	var result []string
 	cfg_extension := ".json"
-	fmt.Print("Configurations: [ ")
 
 	entries, err := os.ReadDir(common.Configfolder())
 	if err != nil {
@@ -67,11 +65,9 @@ func Files() []string {
 			continue
 		}
 
-		fmt.Printf(" %s ", strings.TrimSuffix(filepath.Base(cfgpath), cfg_extension))
 		result = append(result, cfgpath)
 	}
 
-	fmt.Println(" ]")
 	return result
 }
 
@@ -89,7 +85,7 @@ func to_path() {
 
 // Write new configuration to a json file
 func writeNewConfig(newConfig domain.Config) error {
-	configs, err := All()
+	configs, err := Multi()
 
 	// Check if any configuration has already Lang set, and skip it!
 	for _, config := range configs {
@@ -99,11 +95,11 @@ func writeNewConfig(newConfig domain.Config) error {
 	}
 
 	// Write new configuration to file
-	file, _ := json.Marshal(newConfig.Topic)
+	file, _ := json.Marshal(newConfig.Topics)
 
 	cfgFolder := common.Configfolder()
 
-	newConfigPath := path.Join(cfgFolder, newConfig.Name+". json")
+	newConfigPath := path.Join(cfgFolder, newConfig.Name+".json")
 	err = os.WriteFile(newConfigPath, file, 0644)
 	if err != nil {
 		return errors.New(err.Error())
@@ -128,7 +124,7 @@ func RemoveConfig(lang string) error {
 func AllToJson() ([]byte, error) {
 	// mapped := make(map[string]domain.Projects)
 
-	configs, err := All()
+	configs, err := Multi()
 	if err != nil {
 		return nil, err
 	}

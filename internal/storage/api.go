@@ -11,16 +11,16 @@
 // You should have received a copy of the GNU General Public License
 // along with Onur. If not, see <https://www.gnu.org/licenses/>.
 
-package database
+package storage
 
 import (
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	"time"
 
-	"github.com/easbarba/onur/internal/common"
+	"gitlab.com/easbarba/onur/internal/common"
 )
 
 // Structure structure of Configuration files
@@ -62,7 +62,7 @@ func AllAPI(verbose *bool) Structure {
 		defer res.Body.Close()
 	}
 
-	body, readErr := ioutil.ReadAll(res.Body)
+	body, readErr := io.ReadAll(res.Body)
 	if readErr != nil {
 		log.Fatal(readErr)
 	}

@@ -1,13 +1,29 @@
-image: registry.gitlab.com/easbarba/onur-go:0.4.0
+workflow:
+  rules:
+    - if: $CI_COMMIT_TAG
+      when: never
+    - if: $CI_COMMIT_BRANCH == 'main'
 
 stages:
+  - build
   - test
 
-before_script:
-  - ./prepare.bash
+default:
+  image: registry.gitlab.com/easbarba/onur-go:$ONUR_VERSION
+
+variables:
+  ARCH: amd64
+  OS: linux
 
 Integration Testing:
   stage: test
   script:
-    - go mod tidy
     - go test -v ./...
+
+build:
+  stage: build
+  script:
+    - GOARCH=$ARCH GOOS=$OS go build -race -ldflags "-extldflags '-static'" -o ./build/onur ./cmd/cli/*
+  artifacts:
+    paths:
+      - "./build"

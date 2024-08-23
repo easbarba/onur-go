@@ -16,7 +16,8 @@
 package domain
 
 type Topic map[string][]Projects
+
 type Config struct {
-	Name  string `json:"name"`
-	Topic Topic  `json:"topic"`
+	Name   string `json:"name"`
+	Topics Topic  `json:"topic"`
 }

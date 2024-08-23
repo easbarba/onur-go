@@ -15,22 +15,27 @@
 
 package common_test
 
-// import (
-// 	"testing"
+import (
+	"testing"
 
-// 	"github.com/easbarba/onur/internal/common"
-// )
+	"gitlab.com/easbarba/onur/internal/common"
+)
 
-// func TestReadSettings(t *testing.T) {
-// 	expected := true
-// 	singleBranch, depth := common.ReadSettings()
+func TestReadSettings(t *testing.T) {
+	expectedSingleBranch := true
+	settings := common.ReadSettings()
 
-// 	if singleBranch != expected {
-// 		t.Errorf("Expected %t, got %t instead.\n", expected, singleBranch)
-// 	}
+	if settings.Git.SingleBranch != expectedSingleBranch {
+		t.Errorf("Expected %t, got %t instead.\n", expectedSingleBranch, settings.Git.SingleBranch)
+	}
 
-// 	expectedDepth := 2
-// 	if depth != expectedDepth {
-// 		t.Errorf("Expected %d, got %d instead.\n", expectedDepth, depth)
-// 	}
-// }
+	expectedQuiet := false
+	if settings.Git.Quiet != expectedQuiet {
+		t.Errorf("Expected %t, got %t instead.\n", expectedQuiet, settings.Git.Quiet)
+	}
+
+	expectedDepth := 3
+	if settings.Git.Depth != expectedDepth {
+		t.Errorf("Expected %d, got %d instead.\n", expectedDepth, settings.Git.Depth)
+	}
+}

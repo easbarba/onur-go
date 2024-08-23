@@ -24,7 +24,11 @@ import (
 )
 
 type Settings struct {
-	SingleBranch bool `toml:"single_branch"`
+	Git GitSettings `toml:"git"`
+}
+
+type GitSettings struct {
+	SingleBranch bool `toml:"single-branch"`
 	Quiet        bool `toml:"quiet"`
 	Depth        int  `toml:"depth"`
 }
@@ -33,7 +37,7 @@ func ReadSettings() Settings {
 	settingsFile := path.Join(Configfolder(), "settings.toml")
 	if _, err := os.Stat(settingsFile); err != nil {
 		fmt.Print("no configuration file found", err)
-		return Settings{true, true, 1}
+		return Settings{Git: GitSettings{true, true, 1}}
 	}
 
 	var settings Settings
