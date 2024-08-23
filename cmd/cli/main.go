@@ -15,7 +15,6 @@ package main
 
 import (
 	"github.com/alecthomas/kong"
-	"github.com/easbarba/onur/internal/commands"
 )
 
 func main() {
@@ -29,6 +28,7 @@ var cli struct {
 
 	Backup BackupCmd `cmd help:"compress selected projects"`
 	Grab   GrabCmd   `cmd help:"grab all projects"`
+	Config ConfigCmd `cmd help:"Manage configurations"`
 }
 
 type Context struct {
@@ -41,15 +41,30 @@ type BackupCmd struct {
 }
 
 func (r *BackupCmd) Run(ctx *Context) error {
-	commands.Backup(&r.Packages, &r.Verbose)
+	Backup(&r.Packages, &r.Verbose)
 	return nil
 }
 
 type GrabCmd struct {
-	Verbose bool `help:"Provide more information."`
+	Verbose bool   `help:"Provide more information."`
+	Topic   string `arg:"" optional:"" help:"Name and Topic of configuration."`
 }
 
 func (r *GrabCmd) Run(ctx *Context) error {
-	commands.Grab(&r.Verbose)
+	Grab(&r.Topic, &r.Verbose)
+	return nil
+}
+
+type ConfigCmd struct {
+	Verbose bool `help:"Provide more information."`
+
+	Topic  string `arg:"" help:"Name and Topic of configuration."`
+	Name   string `arg:"" optional:"" help:"Name of configuration."`
+	Url    string `arg:"" optional:"" help:"Url of configuration."`
+	Branch string `arg:"" optional:"" help:"Branch of configuration."`
+}
+
+func (r *ConfigCmd) Run(ctx *Context) error {
+	Config(&r.Topic, &r.Name, &r.Url, &r.Branch, &r.Verbose)
 	return nil
 }

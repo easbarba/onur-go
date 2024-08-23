@@ -13,7 +13,7 @@
 *  along with Onur. If not, see <https://www.gnu.org/licenses/>.
  */
 
-package database
+package storage
 
 import (
 	"encoding/json"
@@ -21,58 +21,58 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/easbarba/onur/internal/common"
-	"github.com/easbarba/onur/internal/domain"
+	"gitlab.com/easbarba/onur/internal/common"
+	"gitlab.com/easbarba/onur/internal/domain"
 )
 
 // Parse single configuration file,
 // returns either properly parsed config parsed or empty struct.
-//
-//	TODO: check if the expect syntax is correct TODO: or err.
-func One(filepath string) (domain.Topic, error) {
-	file, err := os.ReadFile(filepath)
+func Single(filepath string) (domain.Config, error) {
+	fileContent, err := os.ReadFile(filepath)
 	if err != nil {
-		return domain.Topic{}, err
+		return domain.Config{}, err
 	}
 
-	subtopics, err := parse(file)
+	topics, err := parse(fileContent)
 	if err != nil {
-		return domain.Topic{}, err
+		return domain.Config{}, err
 	}
 
-	return subtopics, nil
+	config := domain.Config{
+		Name:   common.FileNameWithoutExtension(filepath),
+		Topics: topics,
+	}
+
+	return config, nil
 }
 
-func All() ([]domain.Config, error) {
+// returns multiple configurations
+func Multi() ([]domain.Config, error) {
 	var configs []domain.Config
 
 	for _, filepath := range Files() {
-		one, err := One(filepath)
+		singleConfig, err := Single(filepath)
 		if err != nil {
 			return []domain.Config{}, err
 		}
 
-		config := domain.Config{
-			Name:  common.FileNameWithoutExtension(filepath),
-			Topic: one,
-		}
-
-		configs = append(configs, config)
+		configs = append(configs, singleConfig)
 	}
 
 	return configs, nil
 }
 
+// TODO: check if the expect syntax is correct TODO: or err.
 func parse(file []byte) (domain.Topic, error) {
-	var subtopics domain.Topic
+	var configTopics domain.Topic
 
-	if err := json.Unmarshal(file, &subtopics); err != nil {
+	if err := json.Unmarshal(file, &configTopics); err != nil {
 		errMessage := fmt.Sprintf("Configuration file has incorrect syntax \n%s", err.Error())
 
 		return domain.Topic{}, errors.New(errMessage)
 	}
 
-	return subtopics, nil
+	return configTopics, nil
 }
 
 // TODO: Check for duplicates in configuration files

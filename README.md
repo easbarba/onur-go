@@ -13,32 +13,39 @@ You should have received a copy of the GNU General Public License
 along with Onur. If not, see <https://www.gnu.org/licenses/>.
 -->
 
-# Onur | go
+# Onur | Golang
 
 Easily manage multiple FLOSS repositories.
 
-[c](https://gitlab.com/easbarba/onur) | [dotnet](https://gitlab.com/easbarba/onur-dotnet) | [go](https://gitlab.com/easbarba/onur-go) | [python](https://gitlab.com/easbarba/onur-python) | [rust](https://gitlab.com/easbarba/onur-rust) | [php](https://gitlab.com/easbarba/onur-php) | [java](https://gitlab.com/easbarba/onur-java) 
+[cpp](https://gitlab.com/easbarba/onur-cpp) | [c](https://gitlab.com/easbarba/onur) | [dotnet](https://gitlab.com/easbarba/onur-dotnet) | [rust](https://gitlab.com/easbarba/onur-rust) | [php](https://gitlab.com/easbarba/onur-php) | [java](https://gitlab.com/easbarba/onur-java) 
+| [ruby](https://gitlab.com/easbarba/onur-ruby)
 
 ## Usage
 
-`onur` consumes configuration in the following manners:
-
-By default it looks for configuration files at `$XDG_CONFIG/onur` or in the
-directory set in the `$ONUR_CONFIG_HOME` environment variable.
-
 ```shell
-onur grab
-onur archive nuxt,awesomewm,gitignore
+# grab all projects
+onur grab 
+
+# grab only the c projects
+onur grab c 
+
+# list the cpp configuration file
+onur config cpp 
+
+# list topics of haskell
+onur config haskell.
+
+# list only the projects on misc topic of lisp
+onur config lisp.misc 
+
+# add a new configuration with theses entries in the topic misc of c
+onur config c.misc cli11 https://github.com/cliutils/cli11 main 
+
+# back up these projects as tar.gz
+onur backup ecmascript.nuxt lua.awesomewm misc.gitignore 
+
+onur --help
 ```
-
-# Installation
-
-`go install gitlab.com/easbarba/onur-go@latest`
-
-## GNU Guix
-
-In a system with GNU Guix binary installed, its even easier to grab all
-dependencies: `guix shell`.
 
 ## Configuration file
 
@@ -97,10 +104,9 @@ quiet = true
 depth = 1
 ```
 
-## GNU Guix
+# Installation
 
-In a system with GNU Guix binary installed, its even easier to grab all
-dependencies: `guix shell`.
+`go install gitlab.com/easbarba/onur-go@latest`
 
 ## DEVELOPMENT
 
@@ -116,11 +122,6 @@ or:
 
 
 ![Onur CLI](onur.png)
-
-
-## TODO
-
-Check the `TODO.md` for more information.
 
 ## LICENSE
 

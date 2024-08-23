@@ -1,4 +1,4 @@
-image: registry.gitlab.com/easbarba/onur-go:0.4.0
+image: registry.gitlab.com/easbarba/onur-go:${ONUR_VERSION}
 
 stages:
   - test
@@ -9,5 +9,4 @@ before_script:
 Integration Testing:
   stage: test
   script:
-    - go mod tidy
     - go test -v ./...
